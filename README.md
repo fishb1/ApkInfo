@@ -8,7 +8,7 @@ Installation
 
 To use ApkInfo in your Java/Kotlin project add a dependency to the `build.gradle` file. 
 
-```
+```groovy
 dependencies {
   implementation 'com.github.fishb1:apk-info:1.0.0'
 }
@@ -18,7 +18,7 @@ Usage
 -----
 
 Reading info from a file:
-```
+```kotlin
 val info = ApkInfo.fromInputStream(
     FileInputStream(File("apk_file_name.apk"))
 )
@@ -26,7 +26,7 @@ println("App name: ${info.packageName} (v. ${info.versionName})")
 ```
 
 Reading info from Android assets:
-```
+```kotlin
 val info = ApkInfo.fromInputStream(
     context.assets.open("apk_file_name.apk")
 )
