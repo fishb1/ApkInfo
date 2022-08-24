@@ -5,8 +5,14 @@ plugins {
     `maven-publish`
 }
 
-group = "com.github.fishb1"
-version = "1.0.0"
+object Const {
+    const val groupId = "io.github.fishb1"
+    const val artifact = "apk-info"
+    const val version = "1.0.0"
+}
+
+group = Const.groupId
+version = Const.version
 
 repositories {
     mavenCentral()
@@ -27,9 +33,9 @@ tasks.withType<KotlinCompile> {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.github.fishb1"
-            artifactId = "apk-info"
-            version = "1.0.0"
+            groupId = Const.groupId
+            artifactId = Const.artifact
+            version = Const.version
 
             from(components["java"])
         }
