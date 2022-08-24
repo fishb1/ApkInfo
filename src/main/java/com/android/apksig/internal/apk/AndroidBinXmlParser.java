@@ -68,6 +68,9 @@ public class AndroidBinXmlParser {
     private int mCurrentElementAttrSizeBytes;
     /**
      * Constructs a new parser for the provided document.
+     *
+     * @param xml input byte buffer
+     * @throws XmlParserException if a parsing error is occurred
      */
     public AndroidBinXmlParser(ByteBuffer xml) throws XmlParserException {
         xml.order(ByteOrder.LITTLE_ENDIAN);
@@ -91,12 +94,16 @@ public class AndroidBinXmlParser {
      * Returns the depth of the current element. Outside of the root of the document the depth is
      * {@code 0}. The depth is incremented by {@code 1} before each {@code start element} event and
      * is decremented by {@code 1} after each {@code end element} event.
+     *
+     * @return depth
      */
     public int getDepth() {
         return mDepth;
     }
     /**
      * Returns the type of the current event. See {@code EVENT_...} constants.
+     *
+     * @return even type
      */
     public int getEventType() {
         return mCurrentEvent;
@@ -104,6 +111,8 @@ public class AndroidBinXmlParser {
     /**
      * Returns the local name of the current element or {@code null} if the current event does not
      * pertain to an element.
+     *
+     * @return name
      */
     public String getName() {
         if ((mCurrentEvent != EVENT_START_ELEMENT) && (mCurrentEvent != EVENT_END_ELEMENT)) {
@@ -115,6 +124,8 @@ public class AndroidBinXmlParser {
      * Returns the namespace of the current element or {@code null} if the current event does not
      * pertain to an element. Returns an empty string if the element is not associated with a
      * namespace.
+     *
+     * @return name space
      */
     public String getNamespace() {
         if ((mCurrentEvent != EVENT_START_ELEMENT) && (mCurrentEvent != EVENT_END_ELEMENT)) {
@@ -125,6 +136,8 @@ public class AndroidBinXmlParser {
     /**
      * Returns the number of attributes of the element associated with the current event or
      * {@code -1} if no element is associated with the current event.
+     *
+     * @return attributes count
      */
     public int getAttributeCount() {
         if (mCurrentEvent != EVENT_START_ELEMENT) {
@@ -136,6 +149,8 @@ public class AndroidBinXmlParser {
      * Returns the resource ID corresponding to the name of the specified attribute of the current
      * element or {@code 0} if the name is not associated with a resource ID.
      *
+     * @param index attribute index
+     * @return attribute name resource if
      * @throws IndexOutOfBoundsException if the index is out of range or the current event is not a
      *         {@code start element} event
      * @throws XmlParserException if a parsing error is occurred
@@ -146,6 +161,8 @@ public class AndroidBinXmlParser {
     /**
      * Returns the name of the specified attribute of the current element.
      *
+     * @param index attribute index
+     * @return attribute name
      * @throws IndexOutOfBoundsException if the index is out of range or the current event is not a
      *         {@code start element} event
      * @throws XmlParserException if a parsing error is occurred
@@ -157,6 +174,8 @@ public class AndroidBinXmlParser {
      * Returns the name of the specified attribute of the current element or an empty string if
      * the attribute is not associated with a namespace.
      *
+     * @param index attribute index
+     * @return attribute namespace
      * @throws IndexOutOfBoundsException if the index is out of range or the current event is not a
      *         {@code start element} event
      * @throws XmlParserException if a parsing error is occurred
@@ -168,6 +187,8 @@ public class AndroidBinXmlParser {
      * Returns the value type of the specified attribute of the current element. See
      * {@code VALUE_TYPE_...} constants.
      *
+     * @param index attribute index
+     * @return attribute value type. See {@code VALUE_TYPE_...} constants.
      * @throws IndexOutOfBoundsException if the index is out of range or the current event is not a
      *         {@code start element} event
      * @throws XmlParserException if a parsing error is occurred
@@ -192,6 +213,8 @@ public class AndroidBinXmlParser {
      * Returns the integer value of the specified attribute of the current element. See
      * {@code VALUE_TYPE_...} constants.
      *
+     * @param index attribute index
+     * @return attribute int value
      * @throws IndexOutOfBoundsException if the index is out of range or the current event is not a
      *         {@code start element} event.
      * @throws XmlParserException if a parsing error is occurred
@@ -203,6 +226,8 @@ public class AndroidBinXmlParser {
      * Returns the boolean value of the specified attribute of the current element. See
      * {@code VALUE_TYPE_...} constants.
      *
+     * @param index attribute index
+     * @return attribute boolean value
      * @throws IndexOutOfBoundsException if the index is out of range or the current event is not a
      *         {@code start element} event.
      * @throws XmlParserException if a parsing error is occurred
@@ -214,6 +239,8 @@ public class AndroidBinXmlParser {
      * Returns the string value of the specified attribute of the current element. See
      * {@code VALUE_TYPE_...} constants.
      *
+     * @param index attribute index
+     * @return attribute string value
      * @throws IndexOutOfBoundsException if the index is out of range or the current event is not a
      *         {@code start element} event.
      * @throws XmlParserException if a parsing error is occurred
@@ -237,6 +264,9 @@ public class AndroidBinXmlParser {
     }
     /**
      * Advances to the next parsing event and returns its type. See {@code EVENT_...} constants.
+     *
+     * @return event type. See {@code EVENT_...}
+     * @throws XmlParserException if a parsing error is occurred
      */
     public int next() throws XmlParserException {
         // Decrement depth if the previous event was "end element".
