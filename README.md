@@ -30,7 +30,7 @@ Reading info from Android assets:
 val info = ApkInfo.fromInputStream(
     context.assets.open("apk_file_name.apk")
 )
-Log.d("ZIP", "App name: ${info.packageName} (v. ${info.versionName})")
+Log.d("ApkInfo", "App name: ${info.packageName} (v. ${info.versionName})")
 ```
 
 Copyright

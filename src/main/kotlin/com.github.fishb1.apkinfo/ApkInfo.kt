@@ -7,6 +7,7 @@
 package com.github.fishb1.apkinfo
 
 import com.android.apksig.internal.apk.AndroidBinXmlParser
+import com.android.apksig.internal.apk.AndroidBinXmlParser.XmlParserException
 import java.io.InputStream
 import java.nio.ByteBuffer
 import java.util.zip.ZipEntry
@@ -28,7 +29,6 @@ data class ApkInfo(
 
     companion object {
 
-        @Suppress("MemberVisibilityCanBePrivate")
         val EMPTY = ApkInfo()
 
         private const val MANIFEST_FILE_NAME = "AndroidManifest.xml"
@@ -38,7 +38,6 @@ data class ApkInfo(
          *
          * @return an instance of ApkInfo
          */
-        @Suppress("unused")
         fun fromInputStream(stream: InputStream): ApkInfo {
             ZipInputStream(stream).use { zip ->
                 var entry: ZipEntry?
@@ -46,8 +45,12 @@ data class ApkInfo(
                     entry = zip.nextEntry
                     if (entry?.name == MANIFEST_FILE_NAME) {
                         val data = ByteBuffer.wrap(zip.readBytes())
-                        val parser = AndroidBinXmlParser(data)
-                        return ManifestUtils.readApkInfo(parser)
+                        return try {
+                            val parser = AndroidBinXmlParser(data)
+                            ManifestUtils.readApkInfo(parser)
+                        } catch (e: XmlParserException) {
+                            EMPTY
+                        }
                     }
                 } while (entry != null)
             }

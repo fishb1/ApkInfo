@@ -7,8 +7,6 @@
 package com.github.fishb1.apkinfo
 
 import com.android.apksig.internal.apk.AndroidBinXmlParser
-import com.android.apksig.internal.apk.AndroidBinXmlParser.XmlParserException
-import java.io.IOException
 
 internal object ManifestUtils {
 
@@ -25,38 +23,32 @@ internal object ManifestUtils {
 
     fun readApkInfo(parser: AndroidBinXmlParser): ApkInfo {
         val builder = ApkInfoBuilder()
-        try {
-            var eventType = parser.eventType
-            while (eventType != AndroidBinXmlParser.EVENT_END_DOCUMENT) {
-                if (eventType == AndroidBinXmlParser.EVENT_START_ELEMENT && parser.name == TAG_MANIFEST) {
+        var eventType = parser.eventType
+        while (eventType != AndroidBinXmlParser.EVENT_END_DOCUMENT) {
+            if (eventType == AndroidBinXmlParser.EVENT_START_ELEMENT && parser.name == TAG_MANIFEST) {
 
-                    for (i in 0 until parser.attributeCount) {
-                        when (parser.getAttributeName(i)) {
-                            ATTR_COMPILE_SDK_VERSION ->
-                                builder.compileSdkVersion(parser.getAttributeIntValue(i))
-                            ATTR_COMPILE_SDK_VERSION_CODENAME ->
-                                builder.compileSdkVersionCodename(parser.getAttributeStringValue(i))
-                            ATTR_INSTALL_LOCATION ->
-                                builder.installLocation(parser.getAttributeStringValue(i))
-                            ATTR_PACKAGE ->
-                                builder.packageName(parser.getAttributeStringValue(i))
-                            ATTR_PLATFORM_BUILD_VERSION_CODE ->
-                                builder.platformBuildVersionCode(parser.getAttributeIntValue(i))
-                            ATTR_PLATFORM_BUILD_VERSION_NAME ->
-                                builder.platformBuildVersionName(parser.getAttributeStringValue(i))
-                            ATTR_VERSION_CODE ->
-                                builder.versionCode(parser.getAttributeIntValue(i))
-                            ATTR_VERSION_NAME ->
-                                builder.versionName(parser.getAttributeStringValue(i))
-                        }
+                for (i in 0 until parser.attributeCount) {
+                    when (parser.getAttributeName(i)) {
+                        ATTR_COMPILE_SDK_VERSION ->
+                            builder.compileSdkVersion(parser.getAttributeIntValue(i))
+                        ATTR_COMPILE_SDK_VERSION_CODENAME ->
+                            builder.compileSdkVersionCodename(parser.getAttributeStringValue(i))
+                        ATTR_INSTALL_LOCATION ->
+                            builder.installLocation(parser.getAttributeStringValue(i))
+                        ATTR_PACKAGE ->
+                            builder.packageName(parser.getAttributeStringValue(i))
+                        ATTR_PLATFORM_BUILD_VERSION_CODE ->
+                            builder.platformBuildVersionCode(parser.getAttributeIntValue(i))
+                        ATTR_PLATFORM_BUILD_VERSION_NAME ->
+                            builder.platformBuildVersionName(parser.getAttributeStringValue(i))
+                        ATTR_VERSION_CODE ->
+                            builder.versionCode(parser.getAttributeIntValue(i))
+                        ATTR_VERSION_NAME ->
+                            builder.versionName(parser.getAttributeStringValue(i))
                     }
                 }
-                eventType = parser.next()
             }
-        } catch (e: XmlParserException) {
-            // ignore
-        } catch (e: IOException) {
-            // ignore
+            eventType = parser.next()
         }
         return builder.build()
     }
